@@ -90,6 +90,146 @@ public class Produto {
 	@JoinColumn(name = "categoria_id", nullable = false)
 	private Categoria categoria;
 
+	public Produto() {
+	}
+
+	public Produto(Long id, @NotBlank(message = "SKU é obrigatório") @Size(min = 6, max = 20) String sku,
+			@NotBlank(message = "Nome é obrigatório") @Size(min = 3, max = 200) String nome, String descricao,
+			@NotNull(message = "Preço é obrigatório") @DecimalMin(value = "0.01", message = "Preço deve ser maior que zero") BigDecimal preco,
+			@Min(value = 0, message = "Estoque não pode ser negativo") Integer estoque,
+			@NotNull @DecimalMin("0.01") BigDecimal peso, @NotNull @DecimalMin("0.01") BigDecimal altura,
+			@NotNull @DecimalMin("0.01") BigDecimal largura, @NotNull @DecimalMin("0.01") BigDecimal profundidade,
+			@Min(0) @Max(100) Integer descontoPercentual, Boolean ativo, LocalDateTime dataCadastro,
+			Categoria categoria) {
+		super();
+		this.id = id;
+		this.sku = sku;
+		this.nome = nome;
+		this.descricao = descricao;
+		this.preco = preco;
+		this.estoque = estoque;
+		this.peso = peso;
+		this.altura = altura;
+		this.largura = largura;
+		this.profundidade = profundidade;
+		this.descontoPercentual = descontoPercentual;
+		this.ativo = ativo;
+		this.dataCadastro = dataCadastro;
+		this.categoria = categoria;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public BigDecimal getPreco() {
+		return preco;
+	}
+
+	public void setPreco(BigDecimal preco) {
+		this.preco = preco;
+	}
+
+	public Integer getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(Integer estoque) {
+		this.estoque = estoque;
+	}
+
+	public BigDecimal getPeso() {
+		return peso;
+	}
+
+	public void setPeso(BigDecimal peso) {
+		this.peso = peso;
+	}
+
+	public BigDecimal getAltura() {
+		return altura;
+	}
+
+	public void setAltura(BigDecimal altura) {
+		this.altura = altura;
+	}
+
+	public BigDecimal getLargura() {
+		return largura;
+	}
+
+	public void setLargura(BigDecimal largura) {
+		this.largura = largura;
+	}
+
+	public BigDecimal getProfundidade() {
+		return profundidade;
+	}
+
+	public void setProfundidade(BigDecimal profundidade) {
+		this.profundidade = profundidade;
+	}
+
+	public Integer getDescontoPercentual() {
+		return descontoPercentual;
+	}
+
+	public void setDescontoPercentual(Integer descontoPercentual) {
+		this.descontoPercentual = descontoPercentual;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public LocalDateTime getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(LocalDateTime dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	public BigDecimal calcularPrecoFinal() {
 		if (descontoPercentual == null || descontoPercentual == 0) {
 			return preco;

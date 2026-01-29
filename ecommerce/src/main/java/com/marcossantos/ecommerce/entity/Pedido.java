@@ -63,7 +63,7 @@ public class Pedido {
 	private LocalDateTime dataPedido;
 
 	@Column(name = "prazo_entrega")
-	private Integer prazoEntrega; 
+	private Integer prazoEntrega;
 
 	@Column(name = "codigo_rastreamento", length = 50)
 	private String codigoRastreamento;
@@ -88,6 +88,160 @@ public class Pedido {
 
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<HistoricoPedido> historico = new ArrayList<>();
+
+	public Pedido() {
+	}
+
+	public Pedido(Long id, String numeroPedido, @NotNull BigDecimal subtotal, @NotNull BigDecimal valorFrete,
+			@NotNull BigDecimal desconto, @NotNull BigDecimal valorTotal, StatusPedido status, LocalDateTime dataPedido,
+			Integer prazoEntrega, String codigoRastreamento, Usuario usuario, Endereco endereco, Cupom cupom,
+			List<ItemPedido> itens, Pagamento pagamento, List<HistoricoPedido> historico) {
+		super();
+		this.id = id;
+		this.numeroPedido = numeroPedido;
+		this.subtotal = subtotal;
+		this.valorFrete = valorFrete;
+		this.desconto = desconto;
+		this.valorTotal = valorTotal;
+		this.status = status;
+		this.dataPedido = dataPedido;
+		this.prazoEntrega = prazoEntrega;
+		this.codigoRastreamento = codigoRastreamento;
+		this.usuario = usuario;
+		this.endereco = endereco;
+		this.cupom = cupom;
+		this.itens = itens;
+		this.pagamento = pagamento;
+		this.historico = historico;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNumeroPedido() {
+		return numeroPedido;
+	}
+
+	public void setNumeroPedido(String numeroPedido) {
+		this.numeroPedido = numeroPedido;
+	}
+
+	public BigDecimal getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(BigDecimal subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public BigDecimal getValorFrete() {
+		return valorFrete;
+	}
+
+	public void setValorFrete(BigDecimal valorFrete) {
+		this.valorFrete = valorFrete;
+	}
+
+	public BigDecimal getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(BigDecimal desconto) {
+		this.desconto = desconto;
+	}
+
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getDataPedido() {
+		return dataPedido;
+	}
+
+	public void setDataPedido(LocalDateTime dataPedido) {
+		this.dataPedido = dataPedido;
+	}
+
+	public Integer getPrazoEntrega() {
+		return prazoEntrega;
+	}
+
+	public void setPrazoEntrega(Integer prazoEntrega) {
+		this.prazoEntrega = prazoEntrega;
+	}
+
+	public String getCodigoRastreamento() {
+		return codigoRastreamento;
+	}
+
+	public void setCodigoRastreamento(String codigoRastreamento) {
+		this.codigoRastreamento = codigoRastreamento;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Cupom getCupom() {
+		return cupom;
+	}
+
+	public void setCupom(Cupom cupom) {
+		this.cupom = cupom;
+	}
+
+	public List<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemPedido> itens) {
+		this.itens = itens;
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
+	public List<HistoricoPedido> getHistorico() {
+		return historico;
+	}
+
+	public void setHistorico(List<HistoricoPedido> historico) {
+		this.historico = historico;
+	}
 
 	public void calcularTotal() {
 		this.valorTotal = subtotal.add(valorFrete).subtract(desconto);

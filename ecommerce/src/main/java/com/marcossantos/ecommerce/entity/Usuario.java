@@ -79,7 +79,146 @@ public class Usuario {
 
 	@OneToMany(mappedBy = "usuario")
 	private List<Pedido> pedidos = new ArrayList<>();
-	
+
+	public Usuario() {
+	}
+
+	public Usuario(Long id, @NotBlank(message = "Nome é obrigatório") @Size(min = 3, max = 200) String nome,
+			@Email(message = "E-mail inválido") @NotBlank(message = "E-mail é obrigatório") String email,
+			@Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos") String cpf,
+			@NotBlank(message = "Senha é obrigatório") String senha,
+			@Pattern(regexp = "\\d{10,11}", message = "Telefone inválido") String telefone, LocalDateTime dataCadastro,
+			Boolean ativo, TipoUsuario tipo, Integer tentativasLogin, LocalDateTime bloqueadoAte,
+			List<Endereco> enderecos, Carrinho carrinho, List<Pedido> pedidos) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.cpf = cpf;
+		this.senha = senha;
+		this.telefone = telefone;
+		this.dataCadastro = dataCadastro;
+		this.ativo = ativo;
+		this.tipo = tipo;
+		this.tentativasLogin = tentativasLogin;
+		this.bloqueadoAte = bloqueadoAte;
+		this.enderecos = enderecos;
+		this.carrinho = carrinho;
+		this.pedidos = pedidos;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public LocalDateTime getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(LocalDateTime dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public TipoUsuario getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoUsuario tipo) {
+		this.tipo = tipo;
+	}
+
+	public Integer getTentativasLogin() {
+		return tentativasLogin;
+	}
+
+	public void setTentativasLogin(Integer tentativasLogin) {
+		this.tentativasLogin = tentativasLogin;
+	}
+
+	public LocalDateTime getBloqueadoAte() {
+		return bloqueadoAte;
+	}
+
+	public void setBloqueadoAte(LocalDateTime bloqueadoAte) {
+		this.bloqueadoAte = bloqueadoAte;
+	}
+
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public Carrinho getCarrinho() {
+		return carrinho;
+	}
+
+	public void setCarrinho(Carrinho carrinho) {
+		this.carrinho = carrinho;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+
 	public void adicionarEndereco(Endereco endereco) {
 		enderecos.add(endereco);
 		endereco.setUsuario(this);
@@ -94,13 +233,13 @@ public class Usuario {
 	}
 
 	public void resetarTentativasLogin() {
-         this.tentativasLogin = 0;
-         this.bloqueadoAte = null;
+		this.tentativasLogin = 0;
+		this.bloqueadoAte = null;
 	}
-	
+
 	public void incrementarTentativasLogin() {
 		this.tentativasLogin++;
-		if(this.tentativasLogin >= 5) {
+		if (this.tentativasLogin >= 5) {
 			bloquear(30);
 		}
 	}

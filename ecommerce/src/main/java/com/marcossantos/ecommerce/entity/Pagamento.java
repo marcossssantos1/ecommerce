@@ -32,7 +32,6 @@ public class Pagamento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	// 🔗 1–1 com Pedido
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pedido_id", nullable = false, unique = true)
 	private Pedido pedido;

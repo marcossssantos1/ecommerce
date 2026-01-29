@@ -270,8 +270,10 @@ public class Pedido {
 		StatusPedido statusAnterior = this.status;
 		this.status = novoStatus;
 
-		HistoricoPedido hist = HistoricoPedido.builder().pedido(this).statusAnterior(statusAnterior)
-				.statusNovo(novoStatus).build();
+		HistoricoPedido hist = new HistoricoPedido();
+		hist.setPedido(this);
+		hist.setStatusAnterior(statusAnterior);
+		hist.setStatusNovo(novoStatus);
 
 		historico.add(hist);
 	}

@@ -1,6 +1,5 @@
 package com.marcossantos.ecommerce.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,64 +24,85 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "usuarios", indexes = {
-		@Index(name = "idx_email", columnList = "email"),
-		@Index(name = "idx_cpf", columnList = "cpf")
-		})
+@Table(name = "usuarios", indexes = { @Index(name = "idx_email", columnList = "email"),
+		@Index(name = "idx_cpf", columnList = "cpf") })
 public class Usuario {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank(message = "Nome é obrigatório")
 	@Size(min = 3, max = 200)
 	@Column(nullable = false, length = 200)
 	private String nome;
-	
+
 	@Email(message = "E-mail inválido")
 	@NotBlank(message = "E-mail é obrigatório")
 	@Column(nullable = false, unique = true, length = 200)
 	private String email;
-	
-	@Pattern(regexp = "\\d{11}", message =  "CPF deve conter 11 dígitos")
+
+	@Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos")
 	@Column(nullable = false, unique = true, length = 11)
 	private String cpf;
-	
+
 	@NotBlank(message = "Senha é obrigatório")
 	@Column(nullable = false)
 	private String senha;
-	
-	@Pattern(regexp = "\\d{10,11}", message =  "Telefone inválido")
+
+	@Pattern(regexp = "\\d{10,11}", message = "Telefone inválido")
 	@Column(length = 15)
 	private String telefone;
-	
+
 	@CreationTimestamp
 	@Column(name = "data_cadastro", nullable = false, updatable = false)
 	private LocalDateTime dataCadastro;
-	
+
 	@Column(nullable = false)
 	private Boolean ativo = true;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private TipoUsuario tipo = TipoUsuario.CLIENTE;
-	
+
 	@Column(name = "tentativas_login")
 	private Integer tentativasLogin = 0;
-	
+
 	@Column(name = "bloqueado_ate")
 	private LocalDateTime bloqueadoAte;
-	
+
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Endereco> enderecos = new ArrayList<>();
-	
+
 	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private Carrinho carrinho;
-	
+
 	@OneToMany(mappedBy = "usuario")
 	private List<Pedido> pedidos = new ArrayList<>();
 	
+	public void adicionarEndereco(Endereco endereco) {
+		enderecos.add(endereco);
+		endereco.setUsuario(this);
+	}
+
+	public void bloquear(int minutos) {
+		this.bloqueadoAte = LocalDateTime.now().plusMinutes(minutos);
+	}
+
+	public boolean estaBloqueado() {
+		return bloqueadoAte != null && LocalDateTime.now().isBefore(bloqueadoAte);
+	}
+
+	public void resetarTentativasLogin() {
+         this.tentativasLogin = 0;
+         this.bloqueadoAte = null;
+	}
 	
+	public void incrementarTentativasLogin() {
+		this.tentativasLogin++;
+		if(this.tentativasLogin >= 5) {
+			bloquear(30);
+		}
+	}
 
 }

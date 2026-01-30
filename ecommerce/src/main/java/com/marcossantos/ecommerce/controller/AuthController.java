@@ -1,7 +1,10 @@
 package com.marcossantos.ecommerce.controller;
 
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,29 +12,50 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.marcossantos.ecommerce.config.JwtService;
 import com.marcossantos.ecommerce.dto.LoginRequest;
+import com.marcossantos.ecommerce.dto.LoginResponse;
+import com.marcossantos.ecommerce.entity.Usuario;
+import com.marcossantos.ecommerce.repository.UsuarioRepository;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UsuarioRepository usuarioRepository;
 
-    public AuthController(AuthenticationManager authManager, JwtService jwtService) {
-        this.authManager = authManager;
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtService jwtService,
+                          UsuarioRepository usuarioRepository) {
+        this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
 
-        var auth = new UsernamePasswordAuthenticationToken(
-            request.email(), request.senha()
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                request.email(),
+                request.senha()
+            )
         );
 
-        authManager.authenticate(auth);
+        Usuario usuario = usuarioRepository
+            .findByEmail(request.email())
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        return jwtService.gerarToken(request.email());
+        String token = jwtService.gerarToken(usuario);
+
+        return ResponseEntity.ok(
+            new LoginResponse(token, "Bearer")
+        );
     }
 }
+
+
+
 

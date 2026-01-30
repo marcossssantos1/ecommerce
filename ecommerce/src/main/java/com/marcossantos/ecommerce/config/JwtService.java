@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
+import com.marcossantos.ecommerce.entity.Usuario;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -19,11 +21,15 @@ public class JwtService {
 		return Keys.hmacShaKeyFor(SECRET.getBytes());
 	}
 
-	public String gerarToken(String email) {
-		return Jwts.builder().setSubject(email).setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRACAO))
-				.signWith(getKey(), SignatureAlgorithm.HS256).compact();
-	}
+	public String gerarToken(Usuario usuario) {
+        return Jwts.builder()
+            .setSubject(usuario.getEmail())
+            .claim("role", usuario.getTipo().name())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRACAO))
+            .signWith(SignatureAlgorithm.HS256, SECRET)
+            .compact();
+    }
 
 	public String extrairEmail(String token) {
 		return Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody().getSubject();

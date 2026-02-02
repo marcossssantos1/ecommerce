@@ -1,10 +1,7 @@
 package com.marcossantos.ecommerce.enums;
 
 public enum FormaPagamento {
-	
-	CREDITO,
-    DEBITO,
-    PIX,
-    BOLETO
+
+	CREDITO, DEBITO, PIX, BOLETO
 
 }

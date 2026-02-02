@@ -4,18 +4,17 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "item_pedido")
+@Table(name = "item_pedido", indexes = { @Index(name = "idx_pedido", columnList = "pedido_id"),
+		@Index(name = "idx_sku", columnList = "sku_produto") })
 
 public class ItemPedido {
 
@@ -23,91 +22,25 @@ public class ItemPedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pedido_id", nullable = false)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "pedido_id")
 	private Pedido pedido;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "produto_id", nullable = false)
-	private Produto produto;
+	@Column(name = "nome_produto", nullable = false)
+	private String nomeProduto;
+
+	@Column(name = "sku_produto", nullable = false)
+	private String skuProduto;
 
 	@Column(nullable = false)
 	private Integer quantidade;
 
-	@Column(name = "preco_unitario", nullable = false, precision = 10, scale = 2)
+	@Column(nullable = false)
 	private BigDecimal precoUnitario;
 
-	@Column(nullable = false, precision = 10, scale = 2)
+	@Column(nullable = false)
 	private BigDecimal subtotal;
 
-	@PrePersist
-	@PreUpdate
-	private void calcularSubtotal() {
-		if (precoUnitario != null && quantidade != null) {
-			this.subtotal = precoUnitario.multiply(BigDecimal.valueOf(quantidade));
-		}
-	}
-
-	public ItemPedido() {
-	}
-
-	public ItemPedido(Long id, Pedido pedido, Produto produto, Integer quantidade, BigDecimal precoUnitario,
-			BigDecimal subtotal) {
-		super();
-		this.id = id;
-		this.pedido = pedido;
-		this.produto = produto;
-		this.quantidade = quantidade;
-		this.precoUnitario = precoUnitario;
-		this.subtotal = subtotal;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public BigDecimal getPrecoUnitario() {
-		return precoUnitario;
-	}
-
-	public void setPrecoUnitario(BigDecimal precoUnitario) {
-		this.precoUnitario = precoUnitario;
-	}
-
-	public BigDecimal getSubtotal() {
-		return subtotal;
-	}
-
-	public void setSubtotal(BigDecimal subtotal) {
-		this.subtotal = subtotal;
-	}
-
+	@Column(nullable = false)
+	private BigDecimal desconto;
 }

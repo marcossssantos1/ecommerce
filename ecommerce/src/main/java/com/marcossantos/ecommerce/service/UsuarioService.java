@@ -1,5 +1,7 @@
 package com.marcossantos.ecommerce.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,14 @@ public class UsuarioService {
 		Usuario usuario = Usuario.from(request);
 
 		return repository.save(usuario);
+	}
+
+	public List<Usuario> listarTodosUsuarios() {
+		return repository.findAll();
+	}
+
+	public Usuario listarUsuarioPorEmail(Long id) {
+		return repository.findById(id).orElseThrow(() -> new RuntimeException("Usuario não encontrado!!!"));
 	}
 
 }

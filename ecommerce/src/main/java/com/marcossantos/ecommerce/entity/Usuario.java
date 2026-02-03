@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.marcossantos.ecommerce.dto.UsuarioCreateRequest;
 import com.marcossantos.ecommerce.dto.UsuarioResponse;
+import com.marcossantos.ecommerce.dto.UsuarioUpdateRequest;
 import com.marcossantos.ecommerce.enums.TipoUsuario;
 
 import jakarta.persistence.Column;
@@ -271,5 +272,18 @@ public class Usuario {
 		return new UsuarioResponse(this.nome, this.email, this.cpf, this.telefone, this.cep, this.logradouro,
 				this.numero, this.complemento, this.bairro, this.cidade, this.estado);
 	}
+	
+	public void atualizar(UsuarioUpdateRequest r) {
+	    this.nome = r.nome();
+	    this.telefone = r.telefone();
+	    this.cep = r.cep();
+	    this.logradouro = r.logradouro();
+	    this.numero = r.numero();
+	    this.complemento = r.complemento();
+	    this.bairro = r.bairro();
+	    this.cidade = r.cidade();
+	    this.estado = r.estado();
+	}
+
 
 }

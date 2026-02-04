@@ -2,7 +2,7 @@ package com.marcossantos.ecommerce.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.marcossantos.ecommerce.dto.UsuarioCreateRequest;
@@ -13,11 +13,18 @@ import com.marcossantos.ecommerce.repository.UsuarioRepository;
 @Service
 public class UsuarioService {
 
-	@Autowired
-	private UsuarioRepository repository;
+	private final UsuarioRepository repository;
+	private final PasswordEncoder passwordEncoder;
+
+	public UsuarioService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
+		this.repository = repository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	public Usuario criar(UsuarioCreateRequest request) {
 		Usuario usuario = Usuario.from(request);
+
+		usuario.setSenha(passwordEncoder.encode(request.senha()));
 
 		return repository.save(usuario);
 	}

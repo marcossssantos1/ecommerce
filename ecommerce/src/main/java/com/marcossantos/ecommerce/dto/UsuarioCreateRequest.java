@@ -1,8 +1,8 @@
 package com.marcossantos.ecommerce.dto;
 
-import com.marcossantos.ecommerce.enums.TipoUsuario;
-
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record UsuarioCreateRequest(
 
@@ -38,8 +38,5 @@ public record UsuarioCreateRequest(
     String cidade,
 
     @NotBlank @Size(min = 2, max = 2)
-    String estado,
-
-    @NotNull
-    TipoUsuario tipo
+    String estado
 ) {}

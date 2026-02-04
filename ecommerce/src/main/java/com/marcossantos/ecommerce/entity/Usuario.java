@@ -73,7 +73,7 @@ public class Usuario {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private TipoUsuario tipo;
+	private TipoUsuario tipo = TipoUsuario.CLIENTE;
 
 	public Usuario() {
 	}
@@ -262,7 +262,7 @@ public class Usuario {
 		u.cidade = r.cidade();
 		u.estado = r.estado();
 
-		u.tipo = r.tipo();
+		u.tipo = TipoUsuario.CLIENTE;
 		u.ativo = true;
 
 		return u;
